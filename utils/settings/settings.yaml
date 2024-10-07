@@ -1,0 +1,84 @@
+APP_ENV: dev
+
+global:
+  telegram_settings:
+    enabled: true
+    channels:
+      - name: "ERROR"
+        message_thread_id: 4
+      - name: "GENERAL"
+        message_thread_id: -1
+      - name: "TRADE"
+        message_thread_id: 2
+
+  redis_databases:
+    default: 0
+    session: 1
+    cache: 2
+    queue: 3
+
+  clickhouse_debug_log: true
+  clickhouse_query_log: true
+
+environment:
+  dev:
+    clickhouse_settings:
+      host: "localhost"
+      port: 8123
+      apply_server_timezone: true
+      username: "default"
+      password: "dev_password"
+    redis_settings:
+      host: "localhost"
+      port: 6379
+    paths:
+      root_project: "C:/dev/zeus"
+      zeus_data: "C:/dev/zeus_data"
+      zeus_log: "C:/dev/zeus_data/logs"
+
+  prod:
+    clickhouse_settings:
+      host: "production_host"
+      port: 8123
+      apply_server_timezone: true
+      username: "prod_user"
+      password: "prod_password"
+    redis_settings:
+      host: "production_redis_host"
+      port: 6379
+    paths:
+      root_project: "/home/git/zeus"
+      zeus_data: "/home/git/zeus_data"
+      zeus_log: "/home/git/zeus_data/logs"
+
+apps:
+  default: {}
+  data_collector:
+  web:
+    port: 8000
+    host: "0.0.0.0"
+  trade:
+    check_interval: 60
+  backtest:
+    default_deposit: 10000
+
+exchange_paths:
+  warehouse: "{zeus_data}/{exchange_name}"
+  parquet_path: "{zeus_data}/{exchange_name}/parquet"
+  model_path: "{zeus_data}/{exchange_name}/model"
+  vbt_path: "{zeus_data}/{exchange_name}/vbt"
+  reports_path: "{zeus_data}/{exchange_name}/reports"
+
+exchanges:
+  binance:
+  tinkoff:
+    api_token: "tinkoff_api_token"
+
+
+
+# Map log levels to Telegram channels
+# level_to_channel = {
+#     "CRITICAL": "ERROR",
+#     "TRADE": "TRADE",
+#     "GENERAL": "GENERAL"
+# } INFO AND SUCCESS FOR APP = trade to CHANNEL = TRADE
